@@ -35,6 +35,24 @@ public class BaseController {
             return null;
         }
     }
+     public boolean preparedStatement(Map<Integer, Object> map, String sql) {
+        try {
+            Connection con = koneksi.open();
+            PreparedStatement ps = con.prepareStatement(sql);
+            
+            for(Map.Entry<Integer, Object> entry : map.entrySet()) {
+                ps.setString(entry.getKey(), entry.getValue().toString());
+            }
+            
+            int rows = ps.executeUpdate();
+            con.close();
+            
+            return rows != 0;
+        } catch(SQLException e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+    }
     
     public ResultSet getWithParameter(Map<Integer, Object> map, String sql) {
         try{
@@ -57,22 +75,5 @@ public class BaseController {
             return null;
         }
     }
-    public boolean preparedStatement(Map<Integer, Object> map, String sql) {
-        try {
-            Connection con = koneksi.open();
-            PreparedStatement ps = con.prepareStatement(sql);
-            
-            for(Map.Entry<Integer, Object> entry : map.entrySet()) {
-                ps.setString(entry.getKey(), entry.getValue().toString());
-            }
-            
-            int rows = ps.executeUpdate();
-            con.close();
-            
-            return rows != 0;
-        } catch(SQLException e) {
-            System.out.println(e.getMessage());
-            return false;
-        }
-    }
+   
 }
